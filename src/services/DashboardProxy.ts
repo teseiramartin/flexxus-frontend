@@ -3,7 +3,7 @@ import { createMockDashboard } from '@/src/mocks/dashboard'
 import type { DashboardData, DashboardFilters } from '@/src/types/dashboard'
 import BaseProxy from './BaseProxy'
 
-const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS !== 'false'
+const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false'
 const CACHE_TTL = 60 * 60 * 1000
 
 export class DashboardProxy extends BaseProxy {
@@ -23,9 +23,7 @@ export class DashboardProxy extends BaseProxy {
   }
 
   invalidate(filters: DashboardFilters) {
-    if (typeof window !== 'undefined') {
-      window.localStorage.removeItem(this._getCacheKey(filters))
-    }
+    window.localStorage.removeItem(this._getCacheKey(filters))
   }
 
   private async _getFromApi(filters: DashboardFilters): Promise<DashboardData> {
@@ -46,8 +44,6 @@ export class DashboardProxy extends BaseProxy {
   }
 
   private _getCachedData(filters: DashboardFilters) {
-    if (typeof window === 'undefined') return null
-
     const cached = window.localStorage.getItem(this._getCacheKey(filters))
     if (!cached) return null
 
@@ -56,12 +52,10 @@ export class DashboardProxy extends BaseProxy {
   }
 
   private _setCachedData(filters: DashboardFilters, data: DashboardData) {
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(
-        this._getCacheKey(filters),
-        JSON.stringify({ expiresAt: Date.now() + CACHE_TTL, data })
-      )
-    }
+    window.localStorage.setItem(
+      this._getCacheKey(filters),
+      JSON.stringify({ expiresAt: Date.now() + CACHE_TTL, data })
+    )
   }
 }
 

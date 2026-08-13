@@ -5,7 +5,7 @@ class BaseProxy {
   protected _baseUrl: string
 
   constructor() {
-    this._baseUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
+    this._baseUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
   }
 
   protected _makeUrlParams(params: QueryParams) {
@@ -21,7 +21,7 @@ class BaseProxy {
         if (value === undefined || value === null || value === '') continue
 
         const separator = queryString === '' ? '?' : '&'
-        queryString += `${separator}${encodeURIComponent(entry[0])}=${encodeURIComponent(value)}`
+        queryString += `${separator}${encodeURIComponent(entry[0])}=${encodeURIComponent(String(value))}`
       }
     }
 

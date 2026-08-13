@@ -1,7 +1,5 @@
-import Image from 'next/image'
 import { DarkModeOutlined, LightModeOutlined, RefreshRounded } from '@mui/icons-material'
 import { Box, CircularProgress, IconButton, Stack, Tooltip, Typography } from '@mui/material'
-import logo from '@/public/assets/frontera-logo.png'
 import { useThemeMode } from '@/src/theme/AppThemeProvider'
 import './DashboardHeader.css'
 
@@ -17,7 +15,7 @@ export function DashboardHeader({
   return (
     <Box component='header' className='topbar'>
       <Stack direction='row' className='brand' spacing={1.5}>
-        <Image src={logo} alt='Frontera BI' className='brand-mark' />
+        <img src='/assets/frontera-logo.png' alt='Frontera BI' className='brand-mark' />
         <Box>
           <Typography className='brand-name'>
             Frontera <span>BI</span>

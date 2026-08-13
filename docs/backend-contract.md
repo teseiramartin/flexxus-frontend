@@ -1,18 +1,10 @@
-# Contrato propuesto: Libro IVA Ventas
+# Contrato del backend
 
-La primera versión consume un endpoint agregado para mantener consistente la fotografía del dashboard:
+La SPA consume el backend mediante los proxies de `src/services`.
 
-`GET /api/v1/dashboard/libro-iva-ventas?year=2025&month=1&branch=001`
+## Variables de entorno
 
-La respuesta puede ser el objeto directo o estar envuelta en `{ "data": ... }`. Su contrato TypeScript está en `src/types/dashboard.ts` e incluye resumen, evolución mensual, comprobantes, proveedores, usuarios y detalle de ventas.
+- `VITE_API_URL`: URL base del backend, por defecto `http://localhost:8000`.
+- `VITE_USE_MOCKS`: usa los datos locales salvo que su valor sea exactamente `false`.
 
-## Integración preparada
-
-- `src/services/BaseProxy.ts` concentra URL base, query string, errores y deserialización.
-- `DashboardProxy` administra el endpoint, mocks y caché por filtros durante una hora.
-- `SucursalesProxy` queda listo para consumir el endpoint existente del backend.
-- El botón **Actualizar** invalida la combinación activa y fuerza una consulta nueva.
-- Las tablas usan paginación cliente para la maqueta. Cuando el volumen real lo requiera, los endpoints de detalle deberían aceptar `page` y `pageSize`.
-- `POST /api/v1/sync/all` continúa fuera del frontend porque el backend lo define como operación administrativa.
-
-Para conectar la API real, establecer `NEXT_PUBLIC_USE_MOCKS=false`, configurar `NEXT_PUBLIC_API_URL` y habilitar CORS en el backend.
+Para conectar la API real, establecer `VITE_USE_MOCKS=false`, configurar `VITE_API_URL` y habilitar CORS en el backend para el dominio del frontend.
