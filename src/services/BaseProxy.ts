@@ -1,26 +1,32 @@
-export type Query = Record<string, string | number | boolean | undefined>
-export class BaseProxy {
-  protected readonly baseUrl: string
-  constructor(path = '') {
-    const root = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
-    this.baseUrl = `${root.replace(/\/$/, '')}${path}`
+export type QueryValue = string | number | boolean | Array<string | number> | null | undefined
+export type QueryParams = Record<string, QueryValue>
+
+class BaseProxy {
+  protected _baseUrl: string
+
+  constructor() {
+    this._baseUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
   }
-  protected makeUrl(path = '', query?: Query) {
-    const params = new URLSearchParams()
-    Object.entries(query ?? {}).forEach(([key, value]) => {
-      if (value !== undefined && value !== '') params.set(key, String(value))
-    })
-    return `${this.baseUrl}${path}${params.size ? `?${params}` : ''}`
-  }
-  protected async get<T>(path = '', query?: Query): Promise<T> {
-    const response = await fetch(this.makeUrl(path, query), {
-      headers: { Accept: 'application/json' }
-    })
-    if (!response.ok) throw new Error(`API request failed: ${response.status}`)
-    const payload = (await response.json()) as T | { data: T }
-    return typeof payload === 'object' && payload !== null && 'data' in payload
-      ? payload.data
-      : payload
+
+  protected _makeUrlParams(params: QueryParams) {
+    let queryString = ''
+    const entries = Object.entries(params)
+
+    for (let i = 0; i < entries.length; ++i) {
+      const entry = entries[i]
+      const values = Array.isArray(entry[1]) ? entry[1] : [entry[1]]
+
+      for (let j = 0; j < values.length; ++j) {
+        const value = values[j]
+        if (value === undefined || value === null || value === '') continue
+
+        const separator = queryString === '' ? '?' : '&'
+        queryString += `${separator}${encodeURIComponent(entry[0])}=${encodeURIComponent(value)}`
+      }
+    }
+
+    return queryString
   }
 }
+
 export default BaseProxy

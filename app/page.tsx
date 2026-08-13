@@ -1,10 +1,12 @@
 'use client'
+
 import { DashboardPage } from '@/src/components/DashboardPage'
-import { DashboardProvider } from '@/src/state/dashboard'
+import { StoreProvider } from '@/src/state/StoreProvider'
+
 export default function Home() {
   return (
-    <DashboardProvider>
+    <StoreProvider>
       <DashboardPage />
-    </DashboardProvider>
+    </StoreProvider>
   )
 }

@@ -1,28 +1,64 @@
+import type { ThunkAction } from '@reduxjs/toolkit'
 import { DashboardProxy } from '@/src/services'
-import type { DashboardFilters } from '@/src/types/dashboard'
-import {
-  LOAD_ATTEMPT,
-  LOAD_FAILURE,
-  LOAD_SUCCESS,
-  SET_FILTERS,
-  type DashboardAction
-} from './types'
-const proxy = new DashboardProxy()
-export type Dispatch = (action: DashboardAction) => void
+import type { DashboardData, DashboardFilters } from '@/src/types/dashboard'
+import type { RootState } from '@/src/state/store'
+import * as types from './types'
+import type { DashboardAction } from './types'
+
+type DashboardThunk = ThunkAction<Promise<void>, RootState, unknown, DashboardAction>
+
+export const loadAttempt = (): DashboardAction => ({ type: types.LOAD_ATTEMPT })
+export const loadSuccess = (data: DashboardData): DashboardAction => ({
+  type: types.LOAD_SUCCESS,
+  data
+})
+export const loadFailure = (error: string): DashboardAction => ({
+  type: types.LOAD_FAILURE,
+  error
+})
+
+export const refreshAttempt = (): DashboardAction => ({ type: types.REFRESH_ATTEMPT })
+export const refreshSuccess = (data: DashboardData): DashboardAction => ({
+  type: types.REFRESH_SUCCESS,
+  data
+})
+export const refreshFailure = (error: string): DashboardAction => ({
+  type: types.REFRESH_FAILURE,
+  error
+})
 export const setFilters = (filters: DashboardFilters): DashboardAction => ({
-  type: SET_FILTERS,
+  type: types.SET_FILTERS,
   filters
 })
-export async function loadDashboard(dispatch: Dispatch, filters: DashboardFilters, force = false) {
-  dispatch({ type: LOAD_ATTEMPT, refreshing: force })
-  try {
-    if (force) proxy.invalidate(filters)
-    dispatch({ type: LOAD_SUCCESS, data: await proxy.getLibroIvaVentas(filters) })
-  } catch {
-    dispatch({
-      type: LOAD_FAILURE,
-      error:
-        'No pudimos obtener los datos. La última versión guardada seguirá disponible si existe.'
-    })
+export const reset = (): DashboardAction => ({ type: types.RESET })
+
+export const loadDashboard =
+  (filters: DashboardFilters): DashboardThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(loadAttempt())
+      const proxy = new DashboardProxy()
+      const response = await proxy.getLibroIvaVentas(filters)
+      dispatch(loadSuccess(response))
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'No pudimos obtener los datos.'
+      dispatch(loadFailure(message))
+      throw error
+    }
   }
-}
+
+export const refreshDashboard =
+  (filters: DashboardFilters): DashboardThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(refreshAttempt())
+      const proxy = new DashboardProxy()
+      proxy.invalidate(filters)
+      const response = await proxy.getLibroIvaVentas(filters)
+      dispatch(refreshSuccess(response))
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'No pudimos actualizar los datos.'
+      dispatch(refreshFailure(message))
+      throw error
+    }
+  }

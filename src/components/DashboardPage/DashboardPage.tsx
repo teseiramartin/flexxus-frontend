@@ -1,4 +1,6 @@
 'use client'
+
+import { useEffect, useMemo } from 'react'
 import {
   AssessmentOutlined,
   CalendarMonthOutlined,
@@ -6,8 +8,8 @@ import {
   StorefrontOutlined
 } from '@mui/icons-material'
 import { Alert, Box, Container, Skeleton, Stack } from '@mui/material'
-import { useMemo } from 'react'
-import { useDashboard } from '@/src/state/dashboard'
+import { useAppDispatch, useAppSelector } from '@/src/state/hooks'
+import { loadDashboard, refreshDashboard, setFilters } from '@/src/state/dashboard'
 import { months } from '@/src/utils/formatters'
 import { DashboardFilters } from '../DashboardFilters'
 import { DashboardHeader } from '../DashboardHeader'
@@ -20,7 +22,10 @@ import { VoucherBreakdown } from '../VoucherBreakdown'
 import './DashboardPage.css'
 
 export function DashboardPage() {
-  const { data, filters, loading, refreshing, error, updateFilters, refresh } = useDashboard()
+  const dispatch = useAppDispatch()
+  const { data, filters, pending, refreshPending, error } = useAppSelector(
+    (state) => state.dashboard
+  )
   const branches = useMemo(
     () => data?.sucursales ?? [{ codigo: '001', descripcion: 'Casa Central' }],
     [data?.sucursales]
@@ -29,23 +34,31 @@ export function DashboardPage() {
     () => branches.find((item) => item.codigo === filters.branch)?.descripcion ?? 'Casa Central',
     [branches, filters.branch]
   )
+
+  useEffect(() => {
+    void dispatch(loadDashboard(filters))
+  }, [dispatch, filters])
+
   return (
     <Box className='app-shell'>
       <Container maxWidth={false} className='dashboard-container'>
-        <DashboardHeader refreshing={refreshing} onRefresh={() => void refresh()} />
+        <DashboardHeader
+          refreshing={refreshPending}
+          onRefresh={() => void dispatch(refreshDashboard(filters))}
+        />
         <DashboardFilters
           filters={filters}
           branches={branches}
-          refreshing={refreshing}
-          onChange={updateFilters}
-          onRefresh={() => void refresh()}
+          refreshing={refreshPending}
+          onChange={(newFilters) => dispatch(setFilters(newFilters))}
+          onRefresh={() => void dispatch(refreshDashboard(filters))}
         />
         {error && (
           <Alert severity='warning' icon={<ErrorOutlineOutlined />} sx={{ mb: 2 }}>
             {error}
           </Alert>
         )}
-        {loading && !data ? (
+        {pending && !data ? (
           <Box className='loading-grid'>
             <Skeleton variant='rounded' height={130} />
             <Skeleton variant='rounded' height={130} />
@@ -57,9 +70,7 @@ export function DashboardPage() {
             <>
               <Stack
                 direction='row'
-                alignItems='center'
-                spacing={1}
-                mb={2}
+                sx={{ alignItems: 'center', gap: 1, mb: 2 }}
                 className='context-line'>
                 <StorefrontOutlined fontSize='small' />
                 <span>{selected}</span>

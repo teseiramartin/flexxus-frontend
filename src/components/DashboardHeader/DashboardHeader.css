@@ -5,6 +5,10 @@
   justify-content: space-between;
   border-bottom: 1px solid rgba(13, 45, 93, 0.1);
 }
+.brand {
+  display: flex;
+  align-items: center;
+}
 .brand-mark {
   width: 46px;
   height: 46px;

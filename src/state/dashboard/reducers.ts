@@ -1,28 +1,35 @@
-import {
-  LOAD_ATTEMPT,
-  LOAD_FAILURE,
-  LOAD_SUCCESS,
-  SET_FILTERS,
-  type DashboardAction,
-  type DashboardState
-} from './types'
-export const initialState: DashboardState = {
+import * as types from './types'
+import type { DashboardAction, DashboardState } from './types'
+
+const initialState: DashboardState = {
   data: null,
   filters: { year: 2025, month: 1, branch: '001' },
-  loading: true,
-  refreshing: false,
+  pending: false,
+  refreshPending: false,
   error: null
 }
-export function dashboardReducer(state: DashboardState, action: DashboardAction): DashboardState {
+
+export default function reducer(
+  state: DashboardState = initialState,
+  action: DashboardAction
+): DashboardState {
   switch (action.type) {
-    case LOAD_ATTEMPT:
-      return { ...state, loading: !action.refreshing, refreshing: action.refreshing, error: null }
-    case LOAD_SUCCESS:
-      return { ...state, data: action.data, loading: false, refreshing: false }
-    case LOAD_FAILURE:
-      return { ...state, loading: false, refreshing: false, error: action.error }
-    case SET_FILTERS:
+    case types.LOAD_ATTEMPT:
+      return { ...state, pending: true, error: null }
+    case types.LOAD_SUCCESS:
+      return { ...state, data: action.data, pending: false, error: null }
+    case types.LOAD_FAILURE:
+      return { ...state, pending: false, error: action.error }
+    case types.REFRESH_ATTEMPT:
+      return { ...state, refreshPending: true, error: null }
+    case types.REFRESH_SUCCESS:
+      return { ...state, data: action.data, refreshPending: false, error: null }
+    case types.REFRESH_FAILURE:
+      return { ...state, refreshPending: false, error: action.error }
+    case types.SET_FILTERS:
       return { ...state, filters: action.filters }
+    case types.RESET:
+      return { ...initialState }
     default:
       return state
   }

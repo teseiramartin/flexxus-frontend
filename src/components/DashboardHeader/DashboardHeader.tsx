@@ -12,7 +12,7 @@ export function DashboardHeader({
 }) {
   return (
     <Box component='header' className='topbar'>
-      <Stack direction='row' alignItems='center' spacing={1.5}>
+      <Stack direction='row' className='brand' spacing={1.5}>
         <Image src={logo} alt='Frontera BI' className='brand-mark' />
         <Box>
           <Typography className='brand-name'>
@@ -21,7 +21,7 @@ export function DashboardHeader({
           <Typography className='brand-subtitle'>Inteligencia comercial</Typography>
         </Box>
       </Stack>
-      <Stack direction='row' alignItems='center' spacing={1.5}>
+      <Stack direction='row' className='brand' spacing={1.5}>
         <Chip icon={<CheckCircleOutlineOutlined />} label='Datos locales' className='status-chip' />
         <Tooltip title='Actualizar todos los datos'>
           <span>
