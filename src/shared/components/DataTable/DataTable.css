@@ -15,9 +15,53 @@
 .shared-table-row > td {
   white-space: nowrap;
 }
-.expanded-cell {
+.expand-button {
+  color: var(--muted) !important;
+  transition:
+    transform 0.25s ease,
+    color 0.2s ease !important;
+}
+.expand-button svg {
+  font-size: 0.9rem;
+}
+.expand-button.expanded {
+  color: var(--blue) !important;
+  transform: rotate(90deg);
+}
+.accordion-table-row > td {
+  border-bottom: 0 !important;
+}
+.accordion-table-cell {
+  height: 0;
   padding: 0 !important;
   background: var(--surface-soft);
+}
+.row-accordion {
+  color: inherit !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.row-accordion::before {
+  display: none !important;
+}
+.row-accordion-summary {
+  min-height: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  visibility: hidden !important;
+}
+.row-accordion-summary .MuiAccordionSummary-content {
+  height: 0 !important;
+  margin: 0 !important;
+}
+.row-accordion-details {
+  padding: 0 !important;
+  border-top: 1px solid var(--table-line);
+}
+.row-accordion:not(.Mui-expanded) .row-accordion-details {
+  border-top-color: transparent;
 }
 .expanded-content {
   padding: 18px 24px;

@@ -1,6 +1,10 @@
 'use client'
+
 import { Fragment, useState, type ReactNode } from 'react'
-import { KeyboardArrowDown, KeyboardArrowRight } from '@mui/icons-material'
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp'
+import MuiAccordion from '@mui/material/Accordion'
+import MuiAccordionDetails from '@mui/material/AccordionDetails'
+import MuiAccordionSummary from '@mui/material/AccordionSummary'
 import {
   IconButton,
   Table,
@@ -40,18 +44,13 @@ export function DataTable<T>({
 }: Props<T>) {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(initialRowsPerPage)
-  const [expanded, setExpanded] = useState<Set<string>>(new Set())
+  const [expandedRowId, setExpandedRowId] = useState<string | false>(false)
   const safePage = Math.min(page, Math.max(Math.ceil(rows.length / rowsPerPage) - 1, 0))
   const visible = paginated
     ? rows.slice(safePage * rowsPerPage, safePage * rowsPerPage + rowsPerPage)
     : rows
-  const toggle = (id: string) =>
-    setExpanded((current) => {
-      const next = new Set(current)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
+  const toggleRow = (rowId: string) =>
+    setExpandedRowId((current) => (current === rowId ? false : rowId))
 
   return (
     <>
@@ -70,7 +69,9 @@ export function DataTable<T>({
           <TableBody>
             {visible.map((row) => {
               const id = getRowId(row)
-              const open = expanded.has(id)
+              const isExpanded = expandedRowId === id
+              const contentId = `${ariaLabel}-${id}-content`
+              const summaryId = `${ariaLabel}-${id}-summary`
               return (
                 <Fragment key={id}>
                   <TableRow hover className='shared-table-row'>
@@ -78,9 +79,12 @@ export function DataTable<T>({
                       <TableCell padding='checkbox'>
                         <IconButton
                           size='small'
-                          onClick={() => toggle(id)}
-                          aria-label={open ? 'Contraer detalle' : 'Expandir detalle'}>
-                          {open ? <KeyboardArrowDown /> : <KeyboardArrowRight />}
+                          className={`expand-button ${isExpanded ? 'expanded' : ''}`}
+                          onClick={() => toggleRow(id)}
+                          aria-expanded={isExpanded}
+                          aria-controls={contentId}
+                          aria-label={isExpanded ? 'Contraer detalle' : 'Expandir detalle'}>
+                          <ArrowForwardIosSharpIcon />
                         </IconButton>
                       </TableCell>
                     )}
@@ -90,10 +94,28 @@ export function DataTable<T>({
                       </TableCell>
                     ))}
                   </TableRow>
-                  {open && renderExpandedRow && (
-                    <TableRow>
-                      <TableCell className='expanded-cell' colSpan={columns.length + 1}>
-                        {renderExpandedRow(row)}
+                  {renderExpandedRow && (
+                    <TableRow className='accordion-table-row'>
+                      <TableCell className='accordion-table-cell' colSpan={columns.length + 1}>
+                        <MuiAccordion
+                          disableGutters
+                          elevation={0}
+                          square
+                          expanded={isExpanded}
+                          className='row-accordion'>
+                          <MuiAccordionSummary
+                            id={summaryId}
+                            aria-controls={contentId}
+                            className='row-accordion-summary'>
+                            <span>{isExpanded ? 'Ocultar detalle' : 'Mostrar detalle'}</span>
+                          </MuiAccordionSummary>
+                          <MuiAccordionDetails
+                            id={contentId}
+                            aria-labelledby={summaryId}
+                            className='row-accordion-details'>
+                            {renderExpandedRow(row)}
+                          </MuiAccordionDetails>
+                        </MuiAccordion>
                       </TableCell>
                     </TableRow>
                   )}
@@ -109,10 +131,14 @@ export function DataTable<T>({
           count={rows.length}
           page={safePage}
           rowsPerPage={rowsPerPage}
-          onPageChange={(_, next) => setPage(next)}
+          onPageChange={(_, next) => {
+            setPage(next)
+            setExpandedRowId(false)
+          }}
           onRowsPerPageChange={(event) => {
             setRowsPerPage(Number(event.target.value))
             setPage(0)
+            setExpandedRowId(false)
           }}
           rowsPerPageOptions={[5, 10, 20]}
           labelRowsPerPage='Filas'
