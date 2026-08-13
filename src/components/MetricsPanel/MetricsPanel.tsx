@@ -12,7 +12,7 @@ function Metric({
   value: number
   tone?: 'primary' | 'danger' | 'success'
 }) {
-  const color = tone === 'danger' ? '#d92d20' : tone === 'success' ? '#067647' : '#12366a'
+  const color = tone === 'danger' ? '#d92d20' : tone === 'success' ? '#067647' : '#295492'
   return (
     <Paper className='metric-card' elevation={0}>
       <Typography className='eyebrow'>{label}</Typography>

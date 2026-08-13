@@ -28,7 +28,7 @@ export function DashboardFilters({
   return (
     <Box className='hero'>
       <Box>
-        <Typography className='section-kicker'>LIBRO IVA VENTAS</Typography>
+        <Typography className='section-kicker'>LIBROS IVA (Compra-Venta)</Typography>
         <Typography variant='h3'>Resumen fiscal y comercial</Typography>
         <Typography className='hero-copy'>
           Información consolidada para analizar ventas, compras y comprobantes.
