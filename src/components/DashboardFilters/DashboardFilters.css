@@ -26,13 +26,42 @@
 }
 .filters .MuiFormControl-root {
   min-width: 130px;
-  background: #fff;
+}
+.filters .MuiInputLabel-root {
+  color: var(--muted);
+}
+.filters .MuiInputLabel-root.Mui-focused {
+  color: var(--blue);
+}
+.filters .MuiOutlinedInput-root {
+  color: var(--ink);
+  background: var(--surface);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+.filters .MuiOutlinedInput-notchedOutline {
+  border-color: var(--line);
+}
+.filters .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--muted);
+}
+.filters .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--blue);
+}
+.filters .MuiSelect-icon {
+  color: var(--muted);
 }
 .filters .MuiButton-root {
   height: 40px;
-  background: var(--navy);
+  color: var(--button-text);
+  background: var(--button-bg);
   text-transform: none;
   font-weight: 700;
+  box-shadow: none;
+}
+.filters .MuiButton-root:hover {
+  background: var(--button-hover);
   box-shadow: none;
 }
 @media (max-width: 1100px) {

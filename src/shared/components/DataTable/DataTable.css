@@ -1,5 +1,5 @@
 .shared-table-container th {
-  color: #52637a;
+  color: var(--table-head);
   font-size: 11px;
   font-weight: 750;
   text-transform: uppercase;
@@ -8,16 +8,16 @@
   white-space: nowrap;
 }
 .shared-table-container td {
-  color: #34435a;
+  color: var(--table-text);
   font-size: 12.5px;
-  border-color: #edf0f4;
+  border-color: var(--table-line);
 }
 .shared-table-row > td {
   white-space: nowrap;
 }
 .expanded-cell {
   padding: 0 !important;
-  background: #f7f9fc;
+  background: var(--surface-soft);
 }
 .expanded-content {
   padding: 18px 24px;

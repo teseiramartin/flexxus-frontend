@@ -2,11 +2,14 @@
 
 import { DashboardPage } from '@/src/components/DashboardPage'
 import { StoreProvider } from '@/src/state/StoreProvider'
+import { AppThemeProvider } from '@/src/theme/AppThemeProvider'
 
 export default function Home() {
   return (
-    <StoreProvider>
-      <DashboardPage />
-    </StoreProvider>
+    <AppThemeProvider>
+      <StoreProvider>
+        <DashboardPage />
+      </StoreProvider>
+    </AppThemeProvider>
   )
 }

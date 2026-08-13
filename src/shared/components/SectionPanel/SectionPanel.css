@@ -2,9 +2,12 @@
   position: relative;
   border: 1px solid var(--line);
   border-radius: 14px !important;
-  background: rgba(255, 255, 255, 0.96) !important;
-  box-shadow: 0 8px 30px rgba(13, 45, 93, 0.055) !important;
+  background: var(--surface) !important;
+  box-shadow: 0 8px 30px var(--panel-shadow) !important;
   padding: 22px;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 .section-panel h6 {
   color: var(--navy);

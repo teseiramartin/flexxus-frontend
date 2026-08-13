@@ -1,6 +1,6 @@
 .count-chip {
   color: var(--blue) !important;
-  background: #eef4ff !important;
+  background: var(--chip) !important;
   font-weight: 650;
 }
 .article-text {

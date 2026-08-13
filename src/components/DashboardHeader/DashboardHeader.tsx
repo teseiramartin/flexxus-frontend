@@ -1,8 +1,10 @@
 import Image from 'next/image'
-import { CheckCircleOutlineOutlined, RefreshRounded } from '@mui/icons-material'
-import { Box, Chip, CircularProgress, IconButton, Stack, Tooltip, Typography } from '@mui/material'
+import { DarkModeOutlined, LightModeOutlined, RefreshRounded } from '@mui/icons-material'
+import { Box, CircularProgress, IconButton, Stack, Tooltip, Typography } from '@mui/material'
 import logo from '@/public/assets/frontera-logo.png'
+import { useThemeMode } from '@/src/theme/AppThemeProvider'
 import './DashboardHeader.css'
+
 export function DashboardHeader({
   refreshing,
   onRefresh
@@ -10,6 +12,8 @@ export function DashboardHeader({
   refreshing: boolean
   onRefresh: () => void
 }) {
+  const { mode, toggleTheme } = useThemeMode()
+
   return (
     <Box component='header' className='topbar'>
       <Stack direction='row' className='brand' spacing={1.5}>
@@ -22,11 +26,18 @@ export function DashboardHeader({
         </Box>
       </Stack>
       <Stack direction='row' className='brand' spacing={1.5}>
-        <Chip icon={<CheckCircleOutlineOutlined />} label='Datos locales' className='status-chip' />
+        <Tooltip title={mode === 'light' ? 'Activar tema oscuro' : 'Activar tema claro'}>
+          <IconButton
+            className='header-button'
+            onClick={toggleTheme}
+            aria-label={mode === 'light' ? 'Activar tema oscuro' : 'Activar tema claro'}>
+            {mode === 'light' ? <DarkModeOutlined /> : <LightModeOutlined />}
+          </IconButton>
+        </Tooltip>
         <Tooltip title='Actualizar todos los datos'>
           <span>
             <IconButton
-              className='refresh-button'
+              className='header-button'
               onClick={onRefresh}
               disabled={refreshing}
               aria-label='Actualizar todos los datos'>
