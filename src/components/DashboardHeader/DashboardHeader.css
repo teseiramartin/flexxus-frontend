@@ -1,0 +1,45 @@
+.topbar {
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(13, 45, 93, 0.1);
+}
+.brand-mark {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  border: 1px solid #c8d2df;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(13, 45, 93, 0.08);
+}
+.brand-name {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+}
+.brand-name span {
+  color: #e31b23;
+}
+.brand-subtitle {
+  color: var(--muted);
+  font-size: 11px !important;
+}
+.status-chip {
+  background: #ecfdf3 !important;
+  color: #067647 !important;
+  font-weight: 650;
+}
+.refresh-button {
+  border: 1px solid var(--line) !important;
+  background: #fff !important;
+}
+@media (max-width: 700px) {
+  .topbar {
+    min-height: 70px;
+  }
+  .status-chip {
+    display: none !important;
+  }
+}

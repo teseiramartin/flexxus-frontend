@@ -1,0 +1,17 @@
+.section-panel {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 14px !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  box-shadow: 0 8px 30px rgba(13, 45, 93, 0.055) !important;
+  padding: 22px;
+}
+.section-panel h6 {
+  color: var(--navy);
+  font-weight: 750;
+}
+.section-caption {
+  color: var(--muted);
+  font-size: 13px !important;
+  margin-top: 2px !important;
+}

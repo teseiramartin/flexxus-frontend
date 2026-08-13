@@ -1,0 +1,55 @@
+.hero {
+  padding: 34px 0 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 28px;
+}
+.section-kicker {
+  color: var(--blue);
+  letter-spacing: 0.14em !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
+}
+.hero h3 {
+  color: var(--navy);
+  font-size: clamp(30px, 3vw, 44px);
+  font-weight: 780;
+  letter-spacing: -0.04em;
+}
+.hero-copy {
+  color: var(--muted);
+  margin-top: 8px !important;
+}
+.filters {
+  align-items: center;
+}
+.filters .MuiFormControl-root {
+  min-width: 130px;
+  background: #fff;
+}
+.filters .MuiButton-root {
+  height: 40px;
+  background: var(--navy);
+  text-transform: none;
+  font-weight: 700;
+  box-shadow: none;
+}
+@media (max-width: 1100px) {
+  .hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+@media (max-width: 700px) {
+  .hero {
+    padding-top: 24px;
+  }
+  .filters {
+    width: 100%;
+    align-items: stretch;
+  }
+  .filters .MuiFormControl-root {
+    width: 100%;
+  }
+}

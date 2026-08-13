@@ -1,29 +1,26 @@
 # Flexxus BI Frontend
 
-Primera versión del dashboard de **Libro IVA Ventas**, creada con React, TypeScript y Material UI a partir del diseño y modelo del archivo Power BI `Frontera-v5-1.pbix`.
+Dashboard de Libro IVA Ventas construido con React, TypeScript y Material UI.
 
-## Ejecutar localmente
+## Ejecutar
 
 ```bash
 npm install
 npm run dev
 ```
 
-La aplicación arranca con datos mock y no necesita que el backend esté disponible.
+La aplicación usa datos mock por defecto. Para conectarla al backend, copiar `.env.example` a `.env.local`, configurar la URL y establecer `NEXT_PUBLIC_USE_MOCKS=false`.
 
-## Conectar el backend
+## Estructura
 
-Copiar `.env.example` a `.env.local` y configurar:
+- `app`: rutas y configuración global.
+- `src/components`: componentes de la pantalla; cada componente tiene carpeta, archivo TSX, CSS e índice.
+- `src/shared/components`: componentes reutilizables, incluida `DataTable` con paginación y filas expandidas.
+- `src/services`: `BaseProxy` y proxies específicos para los endpoints.
+- `src/state/dashboard`: actions, reducer, types y provider del dashboard.
+- `src/types`, `src/utils` y `src/mocks`: contratos, utilidades y datos de desarrollo.
 
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
-NEXT_PUBLIC_USE_MOCKS=false
-```
+## Validación
 
-El contrato propuesto está en `docs/backend-contract.md`. El backend debe permitir CORS desde el origen del frontend.
-
-## Comandos
-
-- `npm run dev`: desarrollo local.
-- `npm run build`: compilación de producción.
-- `npm run lint`: análisis estático.
+- `npm run lint`
+- `npm run build`

@@ -1,0 +1,69 @@
+.legend {
+  color: var(--muted);
+  font-size: 12px;
+}
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.dot.sales {
+  background: var(--navy);
+}
+.dot.purchases {
+  background: #5dbb9a;
+}
+.bars {
+  height: 225px;
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  padding: 28px 6px 24px;
+  border-bottom: 1px solid var(--line);
+  background: repeating-linear-gradient(
+    to top,
+    transparent 0,
+    transparent 54px,
+    rgba(229, 234, 241, 0.6) 55px
+  );
+}
+.bar-group {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+}
+.bar {
+  width: min(16px, 32%);
+  border-radius: 4px 4px 1px 1px;
+  min-height: 3px;
+}
+.bar.sales {
+  background: var(--navy);
+}
+.bar.purchases {
+  background: #5dbb9a;
+}
+.bar-group > span {
+  position: absolute;
+  bottom: -21px;
+  color: var(--muted);
+  font-size: 11px;
+}
+@media (max-width: 700px) {
+  .legend {
+    display: none !important;
+  }
+  .bars {
+    gap: 6px;
+  }
+}

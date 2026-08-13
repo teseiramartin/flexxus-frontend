@@ -1,0 +1,10 @@
+.count-chip {
+  color: var(--blue) !important;
+  background: #eef4ff !important;
+  font-weight: 650;
+}
+.article-text {
+  display: block;
+  min-width: 250px;
+  white-space: normal;
+}
