@@ -45,7 +45,7 @@
 .bar {
   width: min(16px, 32%);
   border-radius: 4px 4px 1px 1px;
-  min-height: 3px;
+  min-height: 0;
 }
 .bar.sales {
   background: var(--navy);

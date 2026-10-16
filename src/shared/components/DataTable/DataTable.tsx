@@ -67,6 +67,13 @@ export function DataTable<T>({
             </TableRow>
           </TableHead>
           <TableBody>
+            {visible.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={columns.length + (renderExpandedRow ? 1 : 0)}>
+                  No hay datos para esta consulta.
+                </TableCell>
+              </TableRow>
+            )}
             {visible.map((row) => {
               const id = getRowId(row)
               const isExpanded = expandedRowId === id
@@ -113,7 +120,7 @@ export function DataTable<T>({
                             id={contentId}
                             aria-labelledby={summaryId}
                             className='row-accordion-details'>
-                            {renderExpandedRow(row)}
+                            {isExpanded && renderExpandedRow(row)}
                           </MuiAccordionDetails>
                         </MuiAccordion>
                       </TableCell>

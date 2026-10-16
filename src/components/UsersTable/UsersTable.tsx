@@ -1,6 +1,7 @@
 import { Chip, Typography } from '@mui/material'
 import { DataTable, SectionPanel, type Column } from '@/src/shared/components'
-import type { UsuarioArticulo, UsuarioVenta } from '@/src/types/dashboard'
+import type { DashboardFilters, UsuarioArticulo, UsuarioVenta } from '@/src/types/dashboard'
+import { UserDetail } from '../RemoteData/RemoteData'
 import { currency, number } from '@/src/utils/formatters'
 import './UsersTable.css'
 const cols: Column<UsuarioVenta>[] = [
@@ -31,7 +32,13 @@ const detail: Column<UsuarioArticulo>[] = [
   { key: 'net', label: 'Sin IVA', align: 'right', render: (r) => currency.format(r.precioSinIva) },
   { key: 'total', label: 'Total', align: 'right', render: (r) => currency.format(r.precioTotal) }
 ]
-export function UsersTable({ rows }: { rows: UsuarioVenta[] }) {
+export function UsersTable({
+  rows,
+  filters
+}: {
+  rows: UsuarioVenta[]
+  filters?: DashboardFilters
+}) {
   return (
     <SectionPanel title='Usuarios' caption='Ventas por usuario, área y artículo'>
       <DataTable
@@ -42,13 +49,17 @@ export function UsersTable({ rows }: { rows: UsuarioVenta[] }) {
         renderExpandedRow={(r) => (
           <div className='expanded-content'>
             <Typography variant='h6'>Detalle de ventas de {r.nombre}</Typography>
-            <DataTable
-              rows={r.articulos}
-              columns={detail}
-              getRowId={(x) => x.id}
-              ariaLabel={`Ventas de ${r.nombre}`}
-              paginated={false}
-            />
+            {filters ? (
+              <UserDetail filters={filters} area={r.area} usuario={r.id} />
+            ) : (
+              <DataTable
+                rows={r.articulos}
+                columns={detail}
+                getRowId={(x) => x.id}
+                ariaLabel={`Ventas de ${r.nombre}`}
+                paginated={false}
+              />
+            )}
           </div>
         )}
       />

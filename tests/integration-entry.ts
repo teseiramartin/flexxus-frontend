@@ -1,0 +1,6 @@
+export { ArticulosProxy } from '../src/services/ArticulosProxy'
+export { DashboardProxy, periodParams } from '../src/services/DashboardProxy'
+export { apiErrorMessage } from '../src/services/BaseProxy'
+export { default as reducer } from '../src/state/dashboard/reducers'
+export { loadDashboard, refreshDashboard, setFilters } from '../src/state/dashboard/actions'
+export { DataTable } from '../src/shared/components/DataTable/DataTable'

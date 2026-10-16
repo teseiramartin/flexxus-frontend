@@ -20,6 +20,8 @@ import { TrendChart } from '../TrendChart'
 import { UsersTable } from '../UsersTable'
 import { VoucherBreakdown } from '../VoucherBreakdown'
 import './DashboardPage.css'
+import { USE_MOCKS } from '@/src/services/config'
+import { RealSales, RealTrend } from '../RemoteData/RemoteData'
 
 export function DashboardPage() {
   const dispatch = useAppDispatch()
@@ -27,11 +29,16 @@ export function DashboardPage() {
     (state) => state.dashboard
   )
   const branches = useMemo(
-    () => data?.sucursales ?? [{ codigo: '001', descripcion: 'Casa Central' }],
-    [data?.sucursales]
+    () =>
+      data?.sucursales ??
+      (filters.branch ? [{ codigo: filters.branch, descripcion: filters.branch }] : []),
+    [data?.sucursales, filters.branch]
   )
   const selected = useMemo(
-    () => branches.find((item) => item.codigo === filters.branch)?.descripcion ?? 'Casa Central',
+    () =>
+      filters.branch
+        ? (branches.find((item) => item.codigo === filters.branch)?.descripcion ?? filters.branch)
+        : 'Todas las sucursales',
     [branches, filters.branch]
   )
 
@@ -43,16 +50,21 @@ export function DashboardPage() {
     <Box className='app-shell'>
       <Container maxWidth={false} className='dashboard-container'>
         <DashboardHeader
-          refreshing={refreshPending}
+          refreshing={refreshPending || pending}
           onRefresh={() => void dispatch(refreshDashboard(filters))}
         />
         <DashboardFilters
           filters={filters}
           branches={branches}
-          refreshing={refreshPending}
+          refreshing={refreshPending || pending}
           onChange={(newFilters) => dispatch(setFilters(newFilters))}
           onRefresh={() => void dispatch(refreshDashboard(filters))}
         />
+        <Alert severity='info' sx={{ mb: 2 }}>
+          {USE_MOCKS
+            ? 'Modo demostración: el dashboard muestra datos simulados. El catálogo de artículos consulta la API real.'
+            : 'Datos reales. Las compras incluyen todas las sucursales; proveedores muestra pendientes actuales. El saldo es IVA compras menos IVA ventas.'}
+        </Alert>
         {error && (
           <Alert severity='warning' icon={<ErrorOutlineOutlined />} sx={{ mb: 2 }}>
             {error}
@@ -82,7 +94,7 @@ export function DashboardPage() {
                 <i />
                 <AssessmentOutlined fontSize='small' />
                 <span>
-                  Actualizado{' '}
+                  Consultado{' '}
                   {new Date(data.updatedAt).toLocaleString('es-AR', {
                     dateStyle: 'short',
                     timeStyle: 'short'
@@ -91,14 +103,30 @@ export function DashboardPage() {
               </Stack>
               <MetricsPanel summary={data.resumen} />
               <Box className='analysis-grid'>
-                <TrendChart data={data.evolucionMensual} />
+                {USE_MOCKS ? (
+                  <TrendChart data={data.evolucionMensual} />
+                ) : (
+                  <RealTrend key={data.updatedAt} filters={filters} />
+                )}
                 <VoucherBreakdown rows={data.porTipoComprobante} />
               </Box>
               <Box className='business-grid'>
-                <ProvidersTable rows={data.proveedores} />
-                <UsersTable rows={data.usuarios} />
+                <ProvidersTable
+                  key={`providers-${data.updatedAt}`}
+                  rows={data.proveedores}
+                  real={!USE_MOCKS}
+                />
+                <UsersTable
+                  key={`users-${data.updatedAt}`}
+                  rows={data.usuarios}
+                  filters={USE_MOCKS ? undefined : filters}
+                />
               </Box>
-              <SalesTable rows={data.detalleVentas} />
+              {USE_MOCKS ? (
+                <SalesTable rows={data.detalleVentas} />
+              ) : (
+                <RealSales key={data.updatedAt} filters={filters} />
+              )}
             </>
           )
         )}

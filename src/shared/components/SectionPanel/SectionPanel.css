@@ -1,4 +1,5 @@
 .section-panel {
+  min-width: 0;
   position: relative;
   border: 1px solid var(--line);
   border-radius: 14px !important;

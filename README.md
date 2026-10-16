@@ -9,7 +9,9 @@ npm install
 npm run dev
 ```
 
-La aplicación usa datos mock por defecto. Para conectarla al backend, copiar `.env.example` a `.env.local`, configurar `VITE_API_URL` y establecer `VITE_USE_MOCKS=false`.
+Para conectar localmente, copiar `.env.example` a `.env.local`: `VITE_API_URL` vacío usa el proxy de Vite a `http://localhost:8000` y `VITE_USE_MOCKS=false` activa el dashboard real. Reiniciar Vite después de cambiar variables. Si no se configura el modo, se conserva la demostración original; el catálogo de artículos siempre consulta la API y está rotulado como real.
+
+Ver [contratos, diagnóstico y ejecución local](docs/backend-contract.md) y [validaciones de la integración](docs/integration-validation.md).
 
 ## Comandos
 
@@ -17,7 +19,8 @@ La aplicación usa datos mock por defecto. Para conectarla al backend, copiar `.
 - `npm run build`: genera la aplicación de producción en `dist`.
 - `npm run preview`: sirve localmente el contenido compilado.
 - `npm run lint`: valida el código con ESLint.
-- `npm test`: compila y valida la salida SPA.
+- `npm run typecheck`: comprueba TypeScript estricto.
+- `npm test`: compila, valida la salida SPA y prueba contratos, errores y concurrencia.
 
 ## Estructura
 

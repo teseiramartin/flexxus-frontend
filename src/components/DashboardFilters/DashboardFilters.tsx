@@ -39,9 +39,13 @@ export function DashboardFilters({
           <InputLabel>Año</InputLabel>
           <Select
             label='Año'
+            inputProps={{ 'aria-label': 'Año' }}
             value={filters.year}
             onChange={(e) => onChange({ ...filters, year: Number(e.target.value) })}>
-            {[2024, 2025, 2026].map((y) => (
+            {Array.from(
+              { length: Math.max(new Date().getFullYear(), filters.year) - 2023 + 1 },
+              (_, i) => 2023 + i
+            ).map((y) => (
               <MenuItem value={y} key={y}>
                 {y}
               </MenuItem>
@@ -52,6 +56,7 @@ export function DashboardFilters({
           <InputLabel>Mes</InputLabel>
           <Select
             label='Mes'
+            inputProps={{ 'aria-label': 'Mes' }}
             value={filters.month}
             onChange={(e) => onChange({ ...filters, month: Number(e.target.value) })}>
             {months.map((m, i) => (
@@ -62,11 +67,19 @@ export function DashboardFilters({
           </Select>
         </FormControl>
         <FormControl size='small'>
-          <InputLabel>Sucursal</InputLabel>
+          <InputLabel shrink>Sucursal</InputLabel>
           <Select
             label='Sucursal'
+            notched
+            displayEmpty
+            renderValue={(value) =>
+              branches.find((b) => b.codigo === value)?.descripcion ??
+              (value || 'Todas las sucursales')
+            }
+            inputProps={{ 'aria-label': 'Sucursal' }}
             value={filters.branch}
             onChange={(e) => onChange({ ...filters, branch: e.target.value })}>
+            <MenuItem value=''>Todas las sucursales</MenuItem>
             {branches.map((b) => (
               <MenuItem value={b.codigo} key={b.codigo}>
                 {b.descripcion}

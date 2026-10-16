@@ -8,7 +8,8 @@ export function VoucherBreakdown({ rows }: { rows: DashboardData['porTipoComprob
   const total = rows.reduce((s, x) => s + Math.abs(x.ivaVentas), 0) || 1
   return (
     <SectionPanel title='Por tipo de comprobante' caption='Composición del IVA ventas'>
-      <Stack spacing={2.1} mt={3}>
+      <Stack spacing={2.1} sx={{ mt: 3 }}>
+        {rows.length === 0 && <Typography>No hay comprobantes para este período.</Typography>}
         {rows.map((row) => (
           <Box key={row.tipo}>
             <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 0.7 }}>
@@ -23,7 +24,7 @@ export function VoucherBreakdown({ rows }: { rows: DashboardData['porTipoComprob
               <Box
                 className='progress-fill'
                 sx={{
-                  width: `${Math.max((Math.abs(row.ivaVentas) / total) * 100, 2)}%`,
+                  width: `${(Math.abs(row.ivaVentas) / total) * 100}%`,
                   backgroundColor: row.ivaVentas < 0 ? '#f97066' : '#315b9b'
                 }}
               />

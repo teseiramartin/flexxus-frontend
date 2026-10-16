@@ -25,13 +25,22 @@ const cols: Column<VentaDetalle>[] = [
   { key: 'net', label: 'Sin IVA', align: 'right', render: (r) => currency.format(r.precioSinIva) }
 ]
 
-export function SalesTable({ rows }: { rows: VentaDetalle[] }) {
+export function SalesTable({
+  rows,
+  paginated = true,
+  total = rows.length
+}: {
+  rows: VentaDetalle[]
+  paginated?: boolean
+  total?: number
+}) {
   return (
     <SectionPanel
       title='Detalle de ventas'
       caption='Comprobantes y artículos asociados'
-      action={<Chip label={`${rows.length} movimientos`} size='small' className='count-chip' />}>
+      action={<Chip label={`${total} movimientos`} size='small' className='count-chip' />}>
       <DataTable
+        paginated={paginated}
         rows={rows}
         columns={cols}
         getRowId={(r) => r.id}
